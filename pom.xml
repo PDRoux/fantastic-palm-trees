@@ -45,6 +45,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>6.1.17</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -55,5 +60,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
