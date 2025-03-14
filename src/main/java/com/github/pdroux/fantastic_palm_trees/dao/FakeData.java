@@ -1,27 +1,29 @@
 package com.github.pdroux.fantastic_palm_trees.dao;
 
-import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
+import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 @Repository("fakeDao")
 public class FakeData implements DataDao {
-    private static List<DataEntry> FakeDB = new ArrayList<>();
+    private static Set<DataSet> FakeDB = new HashSet<>();
 
-    public int insertDataEntry(UUID id, DataEntry data) {
-        FakeDB.add(new DataEntry(id, data));
+    public static Set<DataSet> getFakeDB() {
+        return FakeDB;
+    }
+
+    public int insertDataSet(DataSet data) {
+        if (FakeDB.contains(data)) {
+            return -1;
+        }
+        FakeDB.add(data);
 
         return 0;
     }
 
-    public List<DataEntry> selectAllData() {
+    public Set<DataSet> selectAllData() {
         return getFakeDB();
-    }
-
-    public static List<DataEntry> getFakeDB() {
-        return FakeDB;
     }
 }

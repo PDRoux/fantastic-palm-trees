@@ -1,18 +1,15 @@
 package com.github.pdroux.fantastic_palm_trees.dao;
 
-import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
+import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 public interface DataDao {
-    int insertDataEntry(UUID id, DataEntry data);
+    int insertDataSet(DataSet data);
 
-    default int addDataEntry(DataEntry data) {
-        UUID id = UUID.randomUUID();
-
-        return insertDataEntry(id, data);
+    default int addDataSet(DataSet data) {
+        return insertDataSet(data);
     }
 
-    List<DataEntry> selectAllData();
+    Set<DataSet> selectAllData();
 }

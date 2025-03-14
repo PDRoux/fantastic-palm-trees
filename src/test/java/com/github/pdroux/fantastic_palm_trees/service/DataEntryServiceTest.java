@@ -1,62 +1,52 @@
 package com.github.pdroux.fantastic_palm_trees.service;
 
 import com.github.pdroux.fantastic_palm_trees.dao.DataDao;
-import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
+import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
+import static com.github.pdroux.fantastic_palm_trees.TestHelpers.expectedDB;
+import static com.github.pdroux.fantastic_palm_trees.TestHelpers.testSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DataEntryServiceTest {
-    private final DataEntry testEntry = new DataEntry(
-            UUID.randomUUID(),
-            new Date(),
-            "Test Sensor",
-            "Temperature",
-            25.5f
-    );
-
     @Mock
     private DataDao mockDataDao;  // Mock the dependency
 
     @InjectMocks
-    private DataEntryService dataEntryService;  // Injects the mock
+    private DataSetService dataSetService;  // Injects the mock
 
     @Test
     void addDataEntry_ShouldDelegateToDataDao() {
-        when(mockDataDao.addDataEntry(testEntry)).thenReturn(1);
+        when(mockDataDao.addDataSet(testSet)).thenReturn(1);
 
-        int result = dataEntryService.addDataEntry(testEntry);
+        int result = dataSetService.addDataSet(testSet);
 
         assertEquals(1, result);
-        verify(mockDataDao, times(1)).addDataEntry(testEntry);
+        verify(mockDataDao, times(1)).addDataSet(testSet);
     }
 
     @Test
     void selectAllData_ShouldDelegateToDataDao() {
-        List<DataEntry> list = new ArrayList<>(List.of(testEntry));
-        when(mockDataDao.selectAllData()).thenReturn(list);
+        when(mockDataDao.selectAllData()).thenReturn(expectedDB);
 
-        List<DataEntry> actual = dataEntryService.selectAllData();
+        Set<DataSet> actual = dataSetService.selectAllData();
 
-        assertEquals(list, actual);
+        assertEquals(expectedDB, actual);
     }
 
     @Test
     void addDataEntry_ShouldHandleInvalidInput() {
-        int result = dataEntryService.addDataEntry(null);
+        int result = dataSetService.addDataSet(null);
 
         assertEquals(-1, result);
-        verify(mockDataDao, never()).addDataEntry(any());
+        verify(mockDataDao, never()).addDataSet(any());
     }
 }

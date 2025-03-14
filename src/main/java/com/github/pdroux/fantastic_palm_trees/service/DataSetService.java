@@ -1,31 +1,31 @@
 package com.github.pdroux.fantastic_palm_trees.service;
 
 import com.github.pdroux.fantastic_palm_trees.dao.DataDao;
-import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
+import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
-public class DataEntryService {
+public class DataSetService {
     private final DataDao dataDao;
 
     @Autowired
-    public DataEntryService(@Qualifier("fakeDao") DataDao dataDao) {
+    public DataSetService(@Qualifier("fakeDao") DataDao dataDao) {
         this.dataDao = dataDao;
     }
 
-    public int addDataEntry(DataEntry data) {
-        if(data == null) {
+    public int addDataSet(DataSet data) {
+        if (data == null) {
             return -1;
         }
 
-        return dataDao.addDataEntry(data);
+        return dataDao.addDataSet(data);
     }
 
-    public List<DataEntry> selectAllData() {
+    public Set<DataSet> selectAllData() {
         return dataDao.selectAllData();
     }
 }

@@ -1,8 +1,7 @@
 package com.github.pdroux.fantastic_palm_trees.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
-import com.github.pdroux.fantastic_palm_trees.service.DataEntryService;
+import com.github.pdroux.fantastic_palm_trees.service.DataSetService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,11 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
+import static com.github.pdroux.fantastic_palm_trees.TestHelpers.expectedDB;
+import static com.github.pdroux.fantastic_palm_trees.TestHelpers.testSet;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,44 +20,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(DataController.class)
 class DataControllerTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
-    private DataEntryService dataService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private DataSetService dataService;
 
     @Test
     void addDataEntry_ShouldCallServiceAndReturnCreated() throws Exception {
-        DataEntry entry = new DataEntry(
-                UUID.randomUUID(),
-                new Date(),
-                "Test Sensor",
-                "Temperature",
-                25.5f
-        );
-
         mockMvc.perform(post("/v1/data")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(entry)))
+                        .content(objectMapper.writeValueAsString(testSet)))
                 .andExpect(status().isOk());
 
-        verify(dataService, times(1)).addDataEntry(entry);
+        verify(dataService, times(1)).addDataSet(testSet);
     }
 
     @Test
     void selectAllData_ShouldReturnDataFromService() throws Exception {
-        // Arrange
-        DataEntry entry = new DataEntry(
-                UUID.randomUUID(),
-                new Date(),
-                "Test Sensor",
-                "Humidity",
-                60.0f
-        );
-        List<DataEntry> entries = Collections.singletonList(entry);
-        when(dataService.selectAllData()).thenReturn(entries);
+        when(dataService.selectAllData()).thenReturn(expectedDB);
 
         // Act & Assert
         mockMvc.perform(get("/v1/data"))

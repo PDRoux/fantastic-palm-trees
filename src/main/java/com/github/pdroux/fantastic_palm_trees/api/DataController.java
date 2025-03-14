@@ -1,29 +1,29 @@
 package com.github.pdroux.fantastic_palm_trees.api;
 
-import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
-import com.github.pdroux.fantastic_palm_trees.service.DataEntryService;
+import com.github.pdroux.fantastic_palm_trees.model.DataSet;
+import com.github.pdroux.fantastic_palm_trees.service.DataSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RequestMapping("v1/data")
 @RestController
 public class DataController {
-    private final DataEntryService dataService;
+    private final DataSetService dataService;
 
     @Autowired
-    public DataController(DataEntryService dataService) {
+    public DataController(DataSetService dataService) {
         this.dataService = dataService;
     }
 
     @PostMapping
-    public void addDataEntry(@RequestBody DataEntry data) {
-        dataService.addDataEntry(data);
+    public void addDataSet(@RequestBody DataSet data) {
+        dataService.addDataSet(data);
     }
 
     @GetMapping
-    public List<DataEntry> selectAllData() {
+    public Set<DataSet> selectAllData() {
         return dataService.selectAllData();
     }
 }
