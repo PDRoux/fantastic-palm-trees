@@ -1,6 +1,8 @@
 package com.github.pdroux.fantastic_palm_trees.api;
 
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
+import com.github.pdroux.fantastic_palm_trees.model.GenerateDataResponse;
+import com.github.pdroux.fantastic_palm_trees.model.GenerateParams;
 import com.github.pdroux.fantastic_palm_trees.service.DataSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +27,10 @@ public class DataController {
     @GetMapping
     public Set<DataSet> selectAllData() {
         return dataService.selectAllData();
+    }
+
+    @PostMapping("/generate")
+    public GenerateDataResponse generateDataSet(@RequestBody GenerateParams params) {
+        return dataService.generateData(params);
     }
 }

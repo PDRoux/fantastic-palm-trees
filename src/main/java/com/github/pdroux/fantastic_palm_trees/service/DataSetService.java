@@ -1,6 +1,7 @@
 package com.github.pdroux.fantastic_palm_trees.service;
 
 import com.github.pdroux.fantastic_palm_trees.dao.DataDao;
+import com.github.pdroux.fantastic_palm_trees.generator.GeneratorFactory;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import com.github.pdroux.fantastic_palm_trees.model.GenerateDataResponse;
 import com.github.pdroux.fantastic_palm_trees.model.GenerateParams;
@@ -32,9 +33,19 @@ public class DataSetService {
     }
 
     public GenerateDataResponse generateData(GenerateParams params) {
+        DataSet set = GeneratorFactory.createGenerator(params).createDataSet();
+
+        int response = dataDao.addDataSet(set);
+
+        if (response != 0) {
+            return new GenerateDataResponse("Duplicate DataSet", 0);
+        }
+
+        String message = String.format("Successfully added %s dataset", set.name());
+
         return new GenerateDataResponse(
-                "Something went wrong",
-                0
+                message,
+                set.data().size()
         );
     }
 }
