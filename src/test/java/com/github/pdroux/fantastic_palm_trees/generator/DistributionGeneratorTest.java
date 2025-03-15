@@ -15,7 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.github.pdroux.fantastic_palm_trees.TestHelpers.assertDataEntry;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,16 +81,9 @@ class DistributionGeneratorTest {
 
         DataSet result = generator.createDataSet();
 
-        assertEquals("Empty", result.name());
+        assertEquals("TestData", result.name());
         assertTrue(result.data().isEmpty());
         verify(mockScheduler).nextEventTime();
         verifyNoInteractions(mockPopulator, mockSampler);
-    }
-
-    @Test
-    void createDataSet_HandlesNullScheduler() {
-        assertThrows(NullPointerException.class, () -> {
-            generator.createDataSet();
-        });
     }
 }

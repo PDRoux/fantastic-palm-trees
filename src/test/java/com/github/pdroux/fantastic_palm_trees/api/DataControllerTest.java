@@ -28,7 +28,7 @@ class DataControllerTest {
 
     @Test
     void addDataEntry_ShouldCallServiceAndReturnCreated() throws Exception {
-        mockMvc.perform(post("/v1/data")
+        mockMvc.perform(post("/data")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testSet)))
                 .andExpect(status().isOk());
@@ -40,11 +40,11 @@ class DataControllerTest {
     void selectAllData_ShouldReturnDataFromService() throws Exception {
         when(dataService.selectAllData()).thenReturn(expectedDB);
 
-        mockMvc.perform(get("/v1/data"))
+        mockMvc.perform(get("/data"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Test Sensor"))
-                .andExpect(jsonPath("$[0].category").value("Humidity"))
-                .andExpect(jsonPath("$[0].value").value(60.0));
+                .andExpect(jsonPath("$[0].name").value("TestName"))
+                .andExpect(jsonPath("$[0].data[0].category").value("TestCategory"))
+                .andExpect(jsonPath("$[0].data[0].value").value(25.5));
 
         verify(dataService, times(1)).selectAllData();
     }
