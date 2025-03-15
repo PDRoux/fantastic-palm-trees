@@ -17,7 +17,7 @@ public class DistributionGenerator implements SetGenerator {
     private final DistributionSampler sampler;
     private final RateScheduler scheduler;
     private final CategoryPopulator populator;
-    
+
     private int entryCount = 0;
 
     public DistributionGenerator(

@@ -12,16 +12,17 @@ public class FixedRateScheduler implements RateScheduler {
     public FixedRateScheduler(Date start, Date end, Duration cadence, int rate) {
         this.rate = rate;
         this.cadence = cadence;
-        this.current = start;
+        this.current = new Date(start.getTime());
         this.end = end;
     }
 
     public Date nextEventTime() {
-        current.setTime(current.getTime() + cadence.toMillis() / rate);
+        long nextTime = current.getTime() + cadence.toMillis() / rate;
+        current.setTime(nextTime);
         if (current.after(end)) {
             return null;
         }
 
-        return current;
+        return new Date(nextTime);
     }
 }

@@ -22,4 +22,22 @@ public class FixedRateSchedulerTest {
         assertEquals(endTime, scheduler.nextEventTime());
         assertNull(scheduler.nextEventTime());
     }
+
+    @Test
+    void repeatedTest() {
+        int repeats = 50;
+        int rate = 5;
+        Date start = new Date();
+        long interval = Duration.ofHours(1).toMillis() / rate;
+        Date endTime = new Date(start.getTime() + repeats * interval);
+
+        FixedRateScheduler scheduler = new FixedRateScheduler(start, endTime, Duration.ofHours(1), rate);
+
+        for (int i = 1; i <= repeats; i++) {
+            long actualTime = scheduler.nextEventTime().getTime();
+            assertEquals(start.getTime() + i * interval, actualTime);
+        }
+
+        assertNull(scheduler.nextEventTime());
+    }
 }
