@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@RequestMapping("v1/data")
+@RequestMapping("data")
 @RestController
 public class DataController {
     private final DataSetService dataService;

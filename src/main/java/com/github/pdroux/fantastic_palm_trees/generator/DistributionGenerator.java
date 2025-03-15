@@ -2,7 +2,7 @@ package com.github.pdroux.fantastic_palm_trees.generator;
 
 import com.github.pdroux.fantastic_palm_trees.generator.populator.CategoryPopulator;
 import com.github.pdroux.fantastic_palm_trees.generator.sampler.DistributionSampler;
-import com.github.pdroux.fantastic_palm_trees.generator.scheduler.IntervalScheduler;
+import com.github.pdroux.fantastic_palm_trees.generator.scheduler.RateScheduler;
 import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 
@@ -19,12 +19,12 @@ public class DistributionGenerator implements SetGenerator {
         this.populator = populator;
     }
 
-    public DataSet createDataSet(String name, Date end, IntervalScheduler scheduler) {
+    public DataSet createDataSet(String name, Date end, RateScheduler scheduler) {
         List<DataEntry> entries = generateEntries(end, scheduler);
         return new DataSet(name, entries);
     }
 
-    private List<DataEntry> generateEntries(Date end, IntervalScheduler scheduler) {
+    private List<DataEntry> generateEntries(Date end, RateScheduler scheduler) {
         return Stream.generate(scheduler::nextEventTime)
                 .takeWhile(current -> isValidEvent(current, end))
                 .map(this::createEntry)
@@ -32,13 +32,13 @@ public class DistributionGenerator implements SetGenerator {
     }
 
     private boolean isValidEvent(Date current, Date end) {
-        return current != null && current.before(end);
+        return current != null && end.after(current);
     }
 
     private DataEntry createEntry(Date time) {
         return new DataEntry(
                 time,
                 populator.getCategory(),
-                sampler.createValue());
+                sampler.sample());
     }
 }

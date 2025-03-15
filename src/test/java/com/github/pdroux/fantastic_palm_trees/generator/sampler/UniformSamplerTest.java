@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UniformSamplerTest {
     @RepeatedTest(10)
     void createValue_ReturnsWithinRange() {
-        float lower = 5.0f;
-        float upper = 10.0f;
+        double lower = 5.0f;
+        double upper = 10.0f;
         UniformSampler generator = new UniformSampler(upper, lower);
 
-        float value = generator.createValue();
+        double value = generator.sample();
         assertTrue(value >= lower && value < upper);
     }
 }

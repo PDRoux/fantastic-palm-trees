@@ -2,7 +2,7 @@ package com.github.pdroux.fantastic_palm_trees.generator;
 
 import com.github.pdroux.fantastic_palm_trees.generator.populator.CategoryPopulator;
 import com.github.pdroux.fantastic_palm_trees.generator.sampler.DistributionSampler;
-import com.github.pdroux.fantastic_palm_trees.generator.scheduler.IntervalScheduler;
+import com.github.pdroux.fantastic_palm_trees.generator.scheduler.RateScheduler;
 import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class DistributionGeneratorTest {
     @Mock
     private CategoryPopulator mockPopulator;
     @Mock
-    private IntervalScheduler mockScheduler;
+    private RateScheduler mockScheduler;
     @InjectMocks
     private DistributionGenerator generator;
 
@@ -44,12 +44,12 @@ class DistributionGeneratorTest {
         List<DataEntry> entries = result.data();
         assertEquals(2, entries.size());
 
-        assertDataEntry(startDate, "cat1", 25.5f, entries.get(0));
-        assertDataEntry(midDate, "cat2", 60.0f, entries.get(1));
+        assertDataEntry(startDate, "cat1", 25.5, entries.get(0));
+        assertDataEntry(midDate, "cat2", 60.0, entries.get(1));
 
         verify(mockScheduler, times(3)).nextEventTime();
         verify(mockPopulator, times(2)).getCategory();
-        verify(mockSampler, times(2)).createValue();
+        verify(mockSampler, times(2)).sample();
     }
 
     private void setupMultiTimeMocks() {
@@ -61,9 +61,9 @@ class DistributionGeneratorTest {
         when(mockPopulator.getCategory())
                 .thenReturn("cat1")
                 .thenReturn("cat2");
-        when(mockSampler.createValue())
-                .thenReturn(25.5f)
-                .thenReturn(60.0f);
+        when(mockSampler.sample())
+                .thenReturn(25.5)
+                .thenReturn(60.0);
     }
 
     @Test

@@ -14,7 +14,7 @@ public class TestHelpers {
     public static final DataSet testSet = new DataSet("TestName", List.of(testEntry));
     public static final Set<DataSet> expectedDB = Set.of(testSet);
 
-    public static DataEntry createEntry(String category, float value) {
+    public static DataEntry createEntry(String category, double value) {
         return new DataEntry(
                 new Date(),
                 category,
@@ -25,7 +25,7 @@ public class TestHelpers {
     public static void assertDataEntry(
             Date expectedDate,
             String expectedCategory,
-            float expectedValue,
+            double expectedValue,
             DataEntry actualEntry
     ) {
         assertEquals(expectedDate, actualEntry.time());
