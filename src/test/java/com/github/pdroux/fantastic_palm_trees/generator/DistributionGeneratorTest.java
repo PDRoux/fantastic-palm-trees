@@ -5,9 +5,9 @@ import com.github.pdroux.fantastic_palm_trees.generator.sampler.DistributionSamp
 import com.github.pdroux.fantastic_palm_trees.generator.scheduler.RateScheduler;
 import com.github.pdroux.fantastic_palm_trees.model.DataEntry;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -24,32 +24,39 @@ class DistributionGeneratorTest {
     private final Date startDate = new Date(1700000000000L);
     private final Date midDate = new Date(1700000005000L);
     private final Date endDate = new Date(1700000010000L);
+    private final String setName = "TestData";
     @Mock
     private DistributionSampler mockSampler;
     @Mock
     private CategoryPopulator mockPopulator;
     @Mock
     private RateScheduler mockScheduler;
-    @InjectMocks
+
     private DistributionGenerator generator;
+
+    @BeforeEach
+    void setup() {
+        generator = new DistributionGenerator(setName, mockSampler, mockScheduler, mockPopulator);
+    }
 
     @Test
     void createDataSet_GeneratesMultipleEntries() {
         setupMultiTimeMocks();
 
-        DataSet result = generator.createDataSet("TestData", endDate, mockScheduler);
+        DataSet result = generator.createDataSet();
 
-        assertEquals("TestData", result.name());
+        assertEquals(setName, result.name());
 
         List<DataEntry> entries = result.data();
-        assertEquals(2, entries.size());
+        assertEquals(3, entries.size());
 
         assertDataEntry(startDate, "cat1", 25.5, entries.get(0));
         assertDataEntry(midDate, "cat2", 60.0, entries.get(1));
+        assertDataEntry(endDate, "cat2", 60.0, entries.get(2));
 
-        verify(mockScheduler, times(3)).nextEventTime();
-        verify(mockPopulator, times(2)).getCategory();
-        verify(mockSampler, times(2)).sample();
+        verify(mockScheduler, times(4)).nextEventTime();
+        verify(mockPopulator, times(3)).getCategory();
+        verify(mockSampler, times(3)).sample();
     }
 
     private void setupMultiTimeMocks() {
@@ -68,11 +75,10 @@ class DistributionGeneratorTest {
 
     @Test
     void createDataSet_HandlesNoTime() {
-        Date endDate = new Date();
         when(mockScheduler.nextEventTime())
                 .thenReturn(null);
 
-        DataSet result = generator.createDataSet("Empty", endDate, mockScheduler);
+        DataSet result = generator.createDataSet();
 
         assertEquals("Empty", result.name());
         assertTrue(result.data().isEmpty());
@@ -83,7 +89,7 @@ class DistributionGeneratorTest {
     @Test
     void createDataSet_HandlesNullScheduler() {
         assertThrows(NullPointerException.class, () -> {
-            generator.createDataSet("Test", new Date(), null);
+            generator.createDataSet();
         });
     }
 }

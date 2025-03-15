@@ -10,13 +10,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class GenerateDataTest {
+class GenerateParamsTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
     void deserialize_UniformType() throws JsonProcessingException {
         String validJson = """
                 {
+                    "name": "test",
                     "distribution": {
                         "type": "UNIFORM",
                         "lower": 5,
@@ -31,8 +32,9 @@ class GenerateDataTest {
                     }
                 }
                 """;
-        GenerateData actual = mapper.readerFor(GenerateData.class).readValue(validJson);
+        GenerateParams actual = mapper.readerFor(GenerateParams.class).readValue(validJson);
 
+        assertEquals("test", actual.name());
         assertEquals(RateType.FIXED, actual.rate().getType());
         assertEquals(DistributionType.UNIFORM, actual.distribution().getType());
     }
@@ -41,6 +43,7 @@ class GenerateDataTest {
     void deserialize_InvalidType_ThrowsException() {
         String invalidJson = """
                 {
+                    "name": "test",
                     "distribution": {
                         "type": "INVALID",
                         "lower": 5,
@@ -57,7 +60,7 @@ class GenerateDataTest {
                 """;
 
         assertThrows(InvalidTypeIdException.class, () -> {
-            mapper.readValue(invalidJson, GenerateData.class);
+            mapper.readValue(invalidJson, GenerateParams.class);
         });
     }
 
@@ -65,6 +68,7 @@ class GenerateDataTest {
     void deserialize_MissingParams_ThrowsException() {
         String json = """
                 {
+                    "name": "test",
                     "distribution": {
                         "type": "UNIFORM",
                         "lower": 5,
@@ -74,7 +78,7 @@ class GenerateDataTest {
                 """;
 
         assertThrows(JsonProcessingException.class, () -> {
-            mapper.readValue(json, GenerateData.class);
+            mapper.readValue(json, GenerateParams.class);
         });
     }
 }

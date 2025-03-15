@@ -11,28 +11,43 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class DistributionGenerator implements SetGenerator {
-    private final DistributionSampler sampler;
-    private final CategoryPopulator populator;
+    private static final int MAX_ENTRIES = 10000;
 
-    public DistributionGenerator(DistributionSampler sampler, CategoryPopulator populator) {
+    private final String name;
+    private final DistributionSampler sampler;
+    private final RateScheduler scheduler;
+    private final CategoryPopulator populator;
+    
+    private int entryCount = 0;
+
+    public DistributionGenerator(
+            String name,
+            DistributionSampler sampler,
+            RateScheduler scheduler,
+            CategoryPopulator populator
+    ) {
+        this.name = name;
         this.sampler = sampler;
+        this.scheduler = scheduler;
         this.populator = populator;
     }
 
-    public DataSet createDataSet(String name, Date end, RateScheduler scheduler) {
-        List<DataEntry> entries = generateEntries(end, scheduler);
+    public DataSet createDataSet() {
+        List<DataEntry> entries = generateEntries();
         return new DataSet(name, entries);
     }
 
-    private List<DataEntry> generateEntries(Date end, RateScheduler scheduler) {
+    private List<DataEntry> generateEntries() {
         return Stream.generate(scheduler::nextEventTime)
-                .takeWhile(current -> isValidEvent(current, end))
+                .takeWhile(this::isValidEvent)
                 .map(this::createEntry)
                 .toList();
     }
 
-    private boolean isValidEvent(Date current, Date end) {
-        return current != null && end.after(current);
+    private boolean isValidEvent(Date current) {
+        entryCount += 1;
+
+        return current != null && entryCount < MAX_ENTRIES;
     }
 
     private DataEntry createEntry(Date time) {

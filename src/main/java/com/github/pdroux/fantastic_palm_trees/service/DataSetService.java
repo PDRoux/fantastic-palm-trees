@@ -2,6 +2,8 @@ package com.github.pdroux.fantastic_palm_trees.service;
 
 import com.github.pdroux.fantastic_palm_trees.dao.DataDao;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
+import com.github.pdroux.fantastic_palm_trees.model.GenerateDataResponse;
+import com.github.pdroux.fantastic_palm_trees.model.GenerateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -27,5 +29,12 @@ public class DataSetService {
 
     public Set<DataSet> selectAllData() {
         return dataDao.selectAllData();
+    }
+
+    public GenerateDataResponse generateData(GenerateParams params) {
+        return new GenerateDataResponse(
+                "Something went wrong",
+                0
+        );
     }
 }
