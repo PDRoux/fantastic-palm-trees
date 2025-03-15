@@ -12,7 +12,6 @@ public class TestHelpers {
     public static final DataSet testSet = new DataSet("TestName", List.of(testEntry));
     public static final Set<DataSet> expectedDB = Set.of(testSet);
 
-    // Test DataEntry factory method for readability
     public static DataEntry createEntry(String category, float value) {
         return new DataEntry(
                 new Date(),

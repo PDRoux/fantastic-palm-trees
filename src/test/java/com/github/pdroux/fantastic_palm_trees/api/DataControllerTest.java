@@ -40,7 +40,6 @@ class DataControllerTest {
     void selectAllData_ShouldReturnDataFromService() throws Exception {
         when(dataService.selectAllData()).thenReturn(expectedDB);
 
-        // Act & Assert
         mockMvc.perform(get("/v1/data"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Test Sensor"))

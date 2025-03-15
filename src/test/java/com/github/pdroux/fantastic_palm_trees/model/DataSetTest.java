@@ -76,13 +76,11 @@ class DataSetTest {
 
     @Test
     void equals_IgnoresDataContent() {
-        // Arrange
         List<DataEntry> data1 = List.of(createEntry("A", 1.0f));
         List<DataEntry> data2 = List.of(createEntry("B", 2.0f));
         DataSet set1 = new DataSet("Dataset", data1);
         DataSet set2 = new DataSet("Dataset", data2);
 
-        // Act & Assert
         assertEquals(set1, set2);
     }
 }
