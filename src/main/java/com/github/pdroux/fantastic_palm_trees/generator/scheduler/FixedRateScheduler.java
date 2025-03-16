@@ -4,25 +4,23 @@ import java.time.Duration;
 import java.util.Date;
 
 public class FixedRateScheduler implements RateScheduler {
-    private final int rate;
-    private final Duration cadence;
-    private final Date current;
-    private final Date end;
+    private final long interval;
+    private final long endTime;
+
+    private long currentTime;
 
     public FixedRateScheduler(Date start, Date end, Duration cadence, int rate) {
-        this.rate = rate;
-        this.cadence = cadence;
-        this.current = new Date(start.getTime());
-        this.end = end;
+        this.interval = cadence.toMillis() / rate;
+        this.endTime = end.getTime();
+        this.currentTime = start.getTime();
     }
 
     public Date nextEventTime() {
-        long nextTime = current.getTime() + cadence.toMillis() / rate;
-        current.setTime(nextTime);
-        if (current.after(end)) {
+        currentTime += interval;
+        if (currentTime > endTime) {
             return null;
         }
 
-        return new Date(nextTime);
+        return new Date(currentTime);
     }
 }
