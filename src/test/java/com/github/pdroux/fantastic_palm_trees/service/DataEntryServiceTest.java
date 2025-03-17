@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Set;
+import java.util.Collection;
 
 import static com.github.pdroux.fantastic_palm_trees.TestHelpers.expectedDB;
 import static com.github.pdroux.fantastic_palm_trees.TestHelpers.testSet;
@@ -37,7 +37,7 @@ class DataEntryServiceTest {
     void selectAllData_ShouldDelegateToDataDao() {
         when(mockDataDao.selectAllData()).thenReturn(expectedDB);
 
-        Set<DataSet> actual = dataSetService.selectAllData();
+        Collection<DataSet> actual = dataSetService.selectAllData();
 
         assertEquals(expectedDB, actual);
     }

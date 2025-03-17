@@ -2,7 +2,7 @@ package com.github.pdroux.fantastic_palm_trees.dao;
 
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 
-import java.util.Set;
+import java.util.Collection;
 
 public interface DataDao {
     int insertDataSet(DataSet data);
@@ -11,5 +11,7 @@ public interface DataDao {
         return insertDataSet(data);
     }
 
-    Set<DataSet> selectAllData();
+    Collection<DataSet> selectAllData();
+
+    DataSet getDataSet(String name);
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.Collection;
 
 @Service
 public class DataSetService {
@@ -28,8 +28,12 @@ public class DataSetService {
         return dataDao.addDataSet(data);
     }
 
-    public Set<DataSet> selectAllData() {
+    public Collection<DataSet> selectAllData() {
         return dataDao.selectAllData();
+    }
+
+    public DataSet getDataSet(String name) {
+        return dataDao.getDataSet(name);
     }
 
     public GenerateDataResponse generateData(GenerateParams params) {

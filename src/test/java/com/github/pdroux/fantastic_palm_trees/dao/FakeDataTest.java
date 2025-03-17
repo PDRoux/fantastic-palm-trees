@@ -4,7 +4,7 @@ import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.Collection;
 
 import static com.github.pdroux.fantastic_palm_trees.TestHelpers.testSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,7 +26,7 @@ class FakeDataTest {
 
         assertEquals(0, result, "Should return success code 0");
 
-        Set<DataSet> db = fakeData.selectAllData();
+        Collection<DataSet> db = fakeData.selectAllData();
         assertEquals(1, db.size(), "DB should contain 1 entry");
 
         DataSet actualSet = db.iterator().next();
@@ -35,7 +35,7 @@ class FakeDataTest {
 
     @Test
     void shouldRetrieveEmptyListForEmptyDB() {
-        Set<DataSet> result = fakeData.selectAllData();
+        Collection<DataSet> result = fakeData.selectAllData();
         assertTrue(result.isEmpty(), "Should return empty list");
     }
 }

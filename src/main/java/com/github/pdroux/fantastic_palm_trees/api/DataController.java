@@ -7,7 +7,7 @@ import com.github.pdroux.fantastic_palm_trees.service.DataSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.Collection;
 
 @RequestMapping("data")
 @RestController
@@ -25,9 +25,15 @@ public class DataController {
     }
 
     @GetMapping
-    public Set<DataSet> selectAllData() {
+    public Collection<DataSet> selectAllData() {
         return dataService.selectAllData();
     }
+
+    @GetMapping(path = "/{name}")
+    public DataSet getDataSetByName(@PathVariable("name") String name) {
+        return dataService.getDataSet(name);
+    }
+
 
     @PostMapping("/generate")
     public GenerateDataResponse generateDataSet(@RequestBody GenerateParams params) {
