@@ -22,9 +22,7 @@ class FakeDataTest {
 
     @Test
     void shouldInsertNewEntry() {
-        int result = fakeData.insertDataSet(testSet);
-
-        assertEquals(0, result, "Should return success code 0");
+        fakeData.insertDataSet(testSet);
 
         Collection<DataSet> db = fakeData.selectAllData();
         assertEquals(1, db.size(), "DB should contain 1 entry");

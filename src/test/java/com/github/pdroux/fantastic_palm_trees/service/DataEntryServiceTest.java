@@ -1,6 +1,7 @@
 package com.github.pdroux.fantastic_palm_trees.service;
 
 import com.github.pdroux.fantastic_palm_trees.dao.DataDao;
+import com.github.pdroux.fantastic_palm_trees.dao.InvalidDataSet;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import static com.github.pdroux.fantastic_palm_trees.TestHelpers.expectedDB;
 import static com.github.pdroux.fantastic_palm_trees.TestHelpers.testSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,12 +27,19 @@ class DataEntryServiceTest {
 
     @Test
     void addDataEntry_ShouldDelegateToDataDao() {
-        when(mockDataDao.addDataSet(testSet)).thenReturn(1);
+        dataSetService.addDataSet(testSet);
 
-        int result = dataSetService.addDataSet(testSet);
+        verify(mockDataDao, times(1)).insertDataSet(testSet);
+    }
 
-        assertEquals(1, result);
-        verify(mockDataDao, times(1)).addDataSet(testSet);
+    @Test
+    void addDataEntry_ShouldDelegateThrow() {
+        doThrow(new InvalidDataSet("Bad Request"))
+                .when(mockDataDao).insertDataSet(testSet);
+
+        assertThrows(InvalidDataSet.class, () -> dataSetService.addDataSet(testSet));
+
+        verify(mockDataDao, times(1)).insertDataSet(testSet);
     }
 
     @Test
@@ -44,9 +53,7 @@ class DataEntryServiceTest {
 
     @Test
     void addDataEntry_ShouldHandleInvalidInput() {
-        int result = dataSetService.addDataSet(null);
-
-        assertEquals(-1, result);
-        verify(mockDataDao, never()).addDataSet(any());
+        assertThrows(InvalidDataSet.class, () -> dataSetService.addDataSet(null));
+        verify(mockDataDao, never()).insertDataSet(any());
     }
 }

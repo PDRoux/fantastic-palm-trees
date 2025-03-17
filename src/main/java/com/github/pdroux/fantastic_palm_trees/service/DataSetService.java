@@ -1,6 +1,7 @@
 package com.github.pdroux.fantastic_palm_trees.service;
 
 import com.github.pdroux.fantastic_palm_trees.dao.DataDao;
+import com.github.pdroux.fantastic_palm_trees.dao.InvalidDataSet;
 import com.github.pdroux.fantastic_palm_trees.generator.GeneratorFactory;
 import com.github.pdroux.fantastic_palm_trees.model.DataSet;
 import com.github.pdroux.fantastic_palm_trees.model.GenerateDataResponse;
@@ -20,12 +21,14 @@ public class DataSetService {
         this.dataDao = dataDao;
     }
 
-    public int addDataSet(DataSet data) {
+    public void addDataSet(DataSet data) {
         if (data == null) {
-            return -1;
+            throw new InvalidDataSet(
+                    "DataSet cannot be null"
+            );
         }
 
-        return dataDao.addDataSet(data);
+        dataDao.insertDataSet(data);
     }
 
     public Collection<DataSet> selectAllData() {
@@ -33,17 +36,21 @@ public class DataSetService {
     }
 
     public DataSet getDataSet(String name) {
-        return dataDao.getDataSet(name);
+        DataSet set = dataDao.getDataSet(name);
+
+        if (set == null) {
+            throw new DataSetNotFoundException(
+                    "data set not found: %s".formatted(name)
+            );
+        }
+
+        return set;
     }
 
     public GenerateDataResponse generateData(GenerateParams params) {
         DataSet set = GeneratorFactory.createGenerator(params).createDataSet();
 
-        int response = dataDao.addDataSet(set);
-
-        if (response != 0) {
-            return new GenerateDataResponse("Duplicate DataSet", 0);
-        }
+        dataDao.insertDataSet(set);
 
         String message = String.format("Successfully added %s dataset", set.name());
 

@@ -15,13 +15,13 @@ public class FakeData implements DataDao {
         return fakeDB;
     }
 
-    public int insertDataSet(DataSet data) {
+    public void insertDataSet(DataSet data) {
         if (fakeDB.containsKey(data.name())) {
-            return -1;
+            throw new InvalidDataSet(
+                    "DataSet already exists: %s".formatted(data.name())
+            );
         }
         fakeDB.put(data.name(), data);
-
-        return 0;
     }
 
     public Collection<DataSet> selectAllData() {

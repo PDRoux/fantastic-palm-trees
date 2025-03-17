@@ -5,6 +5,7 @@ import com.github.pdroux.fantastic_palm_trees.model.GenerateDataResponse;
 import com.github.pdroux.fantastic_palm_trees.model.GenerateParams;
 import com.github.pdroux.fantastic_palm_trees.service.DataSetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -30,8 +31,8 @@ public class DataController {
     }
 
     @GetMapping(path = "/{name}")
-    public DataSet getDataSetByName(@PathVariable("name") String name) {
-        return dataService.getDataSet(name);
+    public ResponseEntity<DataSet> getDataSetByName(@PathVariable("name") String name) {
+        return ResponseEntity.ok(dataService.getDataSet(name));
     }
 
 
