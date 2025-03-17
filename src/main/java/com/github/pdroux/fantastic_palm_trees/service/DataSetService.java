@@ -59,4 +59,8 @@ public class DataSetService {
                 set.data().size()
         );
     }
+
+    public Collection<String> getNames() {
+        return dataDao.getNames();
+    }
 }

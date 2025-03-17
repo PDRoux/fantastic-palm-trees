@@ -10,4 +10,6 @@ public interface DataDao {
     Collection<DataSet> selectAllData();
 
     DataSet getDataSet(String name);
+
+    Collection<String> getNames();
 }

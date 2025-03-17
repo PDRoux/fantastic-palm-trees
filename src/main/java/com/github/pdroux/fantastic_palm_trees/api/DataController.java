@@ -35,6 +35,10 @@ public class DataController {
         return ResponseEntity.ok(dataService.getDataSet(name));
     }
 
+    @GetMapping("/names")
+    public ResponseEntity<Collection<String>> getNames() {
+        return ResponseEntity.ok(dataService.getNames());
+    }
 
     @PostMapping("/generate")
     public GenerateDataResponse generateDataSet(@RequestBody GenerateParams params) {

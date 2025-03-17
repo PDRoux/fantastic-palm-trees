@@ -31,4 +31,8 @@ public class FakeData implements DataDao {
     public DataSet getDataSet(String name) {
         return fakeDB.get(name);
     }
+    
+    public Collection<String> getNames() {
+        return getFakeDB().keySet();
+    }
 }
